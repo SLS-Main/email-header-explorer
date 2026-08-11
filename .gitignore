@@ -1,0 +1,5 @@
+# Contains a real email header with sensitive message metadata.
+header-example.txt
+
+# Local workspace metadata.
+.codenomad/

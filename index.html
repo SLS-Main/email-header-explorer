@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TraceMail turns raw email headers into clear authentication results and an interactive delivery path.">
+  <title>TraceMail | Email Header Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="TraceMail home">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span>TraceMail</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <span class="privacy-note"><span class="status-dot"></span> Runs locally in your browser</span>
+      <button class="text-button" id="newAnalysisButton" type="button">New analysis</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inputSection">
+      <div class="eyebrow"><span></span> EMAIL FORENSICS, MADE CLEAR</div>
+      <h1>See where an email<br><em>has really been.</em></h1>
+      <p class="hero-copy">Paste a raw email header. We’ll translate every server hop, security check, and hidden signal into a report anyone can understand.</p>
+
+      <div class="input-card">
+        <div class="input-card-head">
+          <div>
+            <label for="headerInput">Raw email header</label>
+            <p>Include everything from the first header line through the last.</p>
+          </div>
+          <span id="lineCount">0 lines</span>
+        </div>
+        <div class="code-editor" id="codeEditor">
+          <pre class="line-numbers" id="lineNumbers" aria-hidden="true">1</pre>
+          <div class="editor-stage">
+            <pre class="highlight-layer" id="highlightLayer" aria-hidden="true"></pre>
+            <textarea class="code-input" id="headerInput" spellcheck="false" wrap="off" aria-label="Raw email header" placeholder="Received: from mail.example.com ...&#10;Authentication-Results: spf=pass ...&#10;From: sender@example.com ..."></textarea>
+          </div>
+        </div>
+        <div class="editor-legend" aria-hidden="true">
+          <span><i class="legend-field"></i> Field</span>
+          <span><i class="legend-address"></i> Address</span>
+          <span><i class="legend-pass"></i> Pass</span>
+          <span><i class="legend-fail"></i> Fail</span>
+          <span class="editor-mode">EMAIL HEADER · PLAIN TEXT</span>
+        </div>
+        <div class="input-actions">
+          <button class="sample-button" id="sampleButton" type="button">Use example header</button>
+          <button class="analyze-button" id="analyzeButton" type="button">
+            Analyze header
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+        <p class="input-error" id="inputError" role="alert"></p>
+      </div>
+
+      <div class="trust-row" aria-label="Product benefits">
+        <span><b>01</b> Nothing uploaded</span>
+        <span><b>02</b> Beginner explanations</span>
+        <span><b>03</b> Full expert evidence</span>
+      </div>
+    </section>
+
+    <section class="report hidden" id="reportSection" aria-live="polite">
+      <div class="report-heading">
+        <div>
+          <div class="eyebrow"><span></span> ANALYSIS COMPLETE</div>
+          <h1>Email journey report</h1>
+          <p id="reportSubtitle"></p>
+        </div>
+        <button class="outline-button" id="copySummaryButton" type="button">Copy summary</button>
+      </div>
+
+      <section class="summary-grid" aria-label="Analysis summary">
+        <article class="verdict-card" id="verdictCard">
+          <div class="card-label">OVERALL ASSESSMENT</div>
+          <div class="verdict-main">
+            <span class="verdict-icon" id="verdictIcon">!</span>
+            <div><h2 id="verdictTitle"></h2><p id="verdictText"></p></div>
+          </div>
+        </article>
+        <article class="metric-card"><div class="card-label">SERVER HOPS</div><strong id="hopCount">0</strong><p>Recorded handoffs</p></article>
+        <article class="metric-card"><div class="card-label">TRAVEL TIME</div><strong id="travelTime">—</strong><p>First to last receipt</p></article>
+        <article class="metric-card"><div class="card-label">FIELDS FOUND</div><strong id="fieldCount">0</strong><p>Parsed header sections</p></article>
+      </section>
+
+      <section class="panel auth-panel">
+        <div class="section-heading">
+          <div><div class="section-kicker">TRUST CHECKS</div><h2>Authentication at a glance</h2></div>
+          <p>These checks help receiving systems decide whether the sender is genuine.</p>
+        </div>
+        <div class="auth-grid" id="authGrid"></div>
+      </section>
+
+      <section class="panel route-panel">
+        <div class="section-heading">
+          <div><div class="section-kicker">DELIVERY ROUTE</div><h2>The path this email took</h2></div>
+          <div class="route-controls">
+            <button type="button" id="routeLeft" aria-label="Scroll route left">←</button>
+            <button type="button" id="routeRight" aria-label="Scroll route right">→</button>
+          </div>
+        </div>
+        <div class="route-tip">Drag or use the arrows to explore · Earliest event is first</div>
+        <div class="route-scroll" id="routeScroll" tabindex="0"><div class="route-track" id="routeTrack"></div></div>
+      </section>
+
+      <section class="details-section">
+        <div class="section-heading details-heading">
+          <div><div class="section-kicker">FULL BREAKDOWN</div><h2>Every header, explained</h2></div>
+          <label class="search-box">
+            <span aria-hidden="true">⌕</span>
+            <input id="fieldSearch" type="search" placeholder="Search fields, values, or descriptions">
+          </label>
+        </div>
+        <div class="filter-row" id="filterRow"></div>
+        <div class="details-layout">
+          <aside class="category-summary" id="categorySummary"></aside>
+          <div class="field-list" id="fieldList"></div>
+        </div>
+        <p class="empty-state hidden" id="emptyState">No fields match this search.</p>
+      </section>
+    </section>
+  </main>
+
+  <dialog class="hop-dialog" id="hopDialog" aria-labelledby="hopDialogTitle">
+    <div class="hop-dialog-head">
+      <div>
+        <div class="section-kicker" id="hopDialogStep">DELIVERY HOP</div>
+        <h2 id="hopDialogTitle">Server handoff</h2>
+      </div>
+      <button class="dialog-close" id="hopDialogClose" type="button" aria-label="Close hop details">×</button>
+    </div>
+    <div id="hopDialogContent"></div>
+    <div class="hop-dialog-nav">
+      <button id="previousHop" type="button">← Previous hop</button>
+      <span id="hopPosition"></span>
+      <button id="nextHop" type="button">Next hop →</button>
+    </div>
+  </dialog>
+
+  <footer><span>TraceMail</span><p>Email intelligence without the guesswork.</p><small>Analysis happens entirely on this device.</small></footer>
+  <script src="app.js"></script>
+</body>
+</html>
