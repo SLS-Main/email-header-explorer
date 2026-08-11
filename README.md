@@ -48,16 +48,53 @@ Check the application JavaScript for syntax errors:
 npm run check
 ```
 
+## Deploy to Cloudflare Pages
+
+This project is a static site and does not require a framework, server runtime,
+database, or environment variables in production.
+
+### Connect the GitHub repository
+
+1. Sign in to the Cloudflare dashboard and open **Workers & Pages**.
+2. Select **Create application**, then **Pages** and **Connect to Git**.
+3. Authorize GitHub and select `SLS-Main/email-header-explorer`.
+4. Configure the deployment with these values:
+
+| Setting | Value |
+| --- | --- |
+| Project name | `email-header-explorer` |
+| Production branch | `main` |
+| Framework preset | None |
+| Build command | `exit 0` |
+| Build output directory | `.` |
+| Root directory | Leave blank |
+
+5. Select **Save and Deploy**.
+
+Cloudflare will publish the application at an
+`email-header-explorer.pages.dev` address. Every push to `main` will create a
+new production deployment. Pull requests and other branches can produce Pages
+preview deployments.
+
+### Add a custom domain
+
+1. Open the Pages project in **Workers & Pages**.
+2. Select **Custom domains**, then **Set up a custom domain**.
+3. Enter the hostname that should serve the application.
+4. If the domain already uses Cloudflare DNS, allow Cloudflare to create the
+   required DNS record. For an external DNS provider, create the CNAME record
+   shown by the setup wizard.
+5. Wait for the domain status and TLS certificate to become active before
+   publishing the URL.
+
+No server-side secrets are required. The deployed application remains entirely
+client-side; Cloudflare Pages only serves the static HTML, CSS, and JavaScript.
+
 ## Privacy
 
 Email headers can contain names, addresses, internal hostnames, IP addresses,
 message identifiers, and security infrastructure details. Treat them as
 sensitive data.
-
-The local `header-example.txt` file is intentionally excluded through
-`.gitignore` because it contains a real email header. Do not remove that ignore
-rule or commit real headers to the repository. Use sanitized test data for any
-future public examples.
 
 ## Project Structure
 
