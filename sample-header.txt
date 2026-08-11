@@ -1,0 +1,41 @@
+Return-Path: <alex@sender.example>
+Received: from mailstore.recipient.example (mailstore.recipient.example [2001:db8:200::25])
+ by mailbox.recipient.example with ESMTPS id 7F4A21B9C3
+ for <jordan@recipient.example>; Tue, 11 Aug 2026 14:32:18 +0000
+Received: from inbound.recipient.example (inbound.recipient.example [198.51.100.18])
+ by mailstore.recipient.example with ESMTPS id 2D91C4E870
+ (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384)
+ for <jordan@recipient.example>; Tue, 11 Aug 2026 14:32:16 +0000
+Authentication-Results: inbound.recipient.example;
+ spf=pass smtp.mailfrom=sender.example;
+ dkim=pass header.d=sender.example header.s=mail2026;
+ dmarc=pass action=none header.from=sender.example;
+ arc=none
+Received-SPF: Pass (sender.example: domain designates 203.0.113.42 as permitted sender)
+ receiver=inbound.recipient.example; client-ip=203.0.113.42;
+ envelope-from=alex@sender.example; helo=mail.sender.example
+Received: from mail.sender.example (mail.sender.example [203.0.113.42])
+ by inbound.recipient.example with ESMTPS id A81E5D2271
+ (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384)
+ for <jordan@recipient.example>; Tue, 11 Aug 2026 14:32:13 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sender.example; s=mail2026; t=1786458729;
+ h=from:to:subject:date:message-id:mime-version:content-type;
+ bh=RmljdGl0aW91c0JvZHlIYXNoRm9yVHJhY2VNYWls;
+ b=RmljdGl0aW91c1NpZ25hdHVyZUZvckRlbW9uc3RyYXRpb25Pbmx5
+Received: from laptop.alex.example (unknown [192.0.2.44])
+ by mail.sender.example with ESMTPSA id 93BC0184F2
+ (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384)
+ for <jordan@recipient.example>; Tue, 11 Aug 2026 14:32:09 +0000
+From: Alex Rivera <alex@sender.example>
+To: Jordan Lee <jordan@recipient.example>
+Subject: Quarterly project update
+Date: Tue, 11 Aug 2026 14:32:07 +0000
+Message-ID: <20260811143207.93BC0184F2@mail.sender.example>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="tracemail-demo-boundary"
+Content-Language: en-US
+X-Mailer: ExampleMail 4.2
+X-Spam-Status: No, score=0.1 required=5.0
+X-Virus-Scanned: Clean by Example Gateway
+X-TraceMail-Sample: This header is fictional and uses reserved example addresses

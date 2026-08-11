@@ -102,6 +102,7 @@ sensitive data.
 index.html    Application structure and report interface
 styles.css    Responsive design, editor, route, and dialog styling
 app.js        Header parser, analysis logic, and UI interactions
+sample-header.txt  Fictional demonstration header using reserved addresses
 package.json  Local server and validation commands
 ```
 

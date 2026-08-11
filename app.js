@@ -328,7 +328,7 @@ async function loadSample() {
   button.disabled = true;
   button.textContent = "Loading example…";
   try {
-    const response = await fetch("header-example.txt");
+    const response = await fetch("sample-header.txt");
     if (!response.ok) throw new Error("Unable to load example");
     $("#headerInput").value = await response.text();
     updateLineCount();
